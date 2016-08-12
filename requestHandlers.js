@@ -1,4 +1,6 @@
-var exec = require("child_process").exec;
+var querystring = require("querystring"),
+fs = require("fs"),
+formidable = require("formidable");
 
 function start(response) {
 	console.log("Request handler 'start' was called.");
@@ -9,7 +11,8 @@ function start(response) {
 		response.end();
 	});
 }
-function upload(response) {
+
+function upload(response, request) {
 	console.log("Request handler 'upload' was called.");
 
 	response.writeHead(200, {"Content-Type": "text/html"});
@@ -19,8 +22,13 @@ function upload(response) {
 	response.write("<button type='submit'>Send</button>");
 	response.write("</form>");
 	response.end();
-
-
 }
+
+function show(response) {
+	console.log("Request handler 'show' was called.");
+	response.writeHead(200, {"Content-Type": "image/png"});
+	fs.createReadStream("./tmp/test.png").pipe(response);
+}
+
 exports.start = start;
 exports.upload = upload;
